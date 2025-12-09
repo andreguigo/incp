@@ -62,7 +62,7 @@ export default {
 		capturePhoto() {
 			const video = this.$refs.video;
 
-			const scale = Math.min(128 / video.videoWidth, 128 / video.videoHeight, 1);
+			const scale = Math.min(256 / video.videoWidth, 256 / video.videoHeight, 1);
 			const w = video.videoWidth * scale;
 			const h = video.videoHeight * scale;
 
