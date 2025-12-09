@@ -68,10 +68,7 @@ export default {
         },
 		countArea(area) {
 			return this.myListUsers.reduce((acc, item) => {
-				const list = item.selectedVolunteerArea
-					.toLowerCase()
-					.split(",")
-					.map(a => a.trim());
+				const list = item.selectedVolunteerArea					
 
 				return acc + list.filter(a => a === area.toLowerCase()).length;
 			}, 0);

@@ -31,7 +31,7 @@
                         <th scope="row">
                             <div class="avatar-tb">
                                 <img 
-                                    :src="baseUrl + user.fileName" 
+                                    :src="user.fileNameUrl" 
                                     :alt="'Foto de perfil de ' + user.fullName" 
                                     class="rounded"
                                     width="96"
@@ -83,11 +83,11 @@
                         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
                             <div class="avatar">
                                 <img 
-                                            :src="baseUrl + userProfile.fileName" 
-                                            :alt="'Foto de perfil de ' + userProfile.fullName" 
-                                            class="rounded"
-                                            width="128"
-                                        />
+                                    :src="userProfile.fileNameUrl" 
+                                    :alt="'Foto de perfil de ' + userProfile.fullName" 
+                                    class="rounded"
+                                    width="128"
+                                />
                             </div>
                             <h2>{{ firstUpperCase(userProfile.fullName) }}</h2>
                             <p class="lead">{{ firstUpperCase( userProfile.selectedVolunteerArea ) }}</p>
@@ -97,7 +97,7 @@
                                 <p>{{ firstUpperCase(userProfile.fullName).split(' ')[0] }} tem {{ userProfile.birthDate }} anos e é membro desde {{ userProfile.selectedMemberDate }}.</p>
                                 
                                 <h4>Foi batizada em:</h4>
-                                <p>{{ userProfile.baptismDate }}</p>
+                                <p>{{ formatDate(userProfile.baptismDate) }}</p>
 
                                 <h4>Contato:</h4>
                                 <a class="btn" :href="'https://wa.me/' + sanitizePhone(userProfile.phone)" target="_blank"><i class="bi bi-whatsapp"></i> falar no Whatsapp</a>
@@ -153,24 +153,16 @@ export default {
         }
     },
     methods: {
-        listUsers() {
-            axios.get('http://localhost:3000/api')
-                .then(response => { 
-                    this.myListUsers = response.data 
-                })
-                .catch(error => {
-                    console.error('Erro ao listar usuários:', error);
-                });
+        async listUsers() {
+            const res = await axios.get('http://localhost:3000/api/');
+            this.myListUsers = res.data;
         },
 
-        userOnly(identifier) {
-            axios.get('http://localhost:3000/api/' + identifier)
-                .then(response => { 
-                    this.userProfile = response.data;
-                })
-                .catch(error => {
-                    console.error('Erro ao listar usuários:', error);
-                });
+        async userOnly(identifier) {
+            const res = await axios.get(`http://localhost:3000/api/${identifier}`);
+            if (!res) return;
+            
+            this.userProfile = res.data;
         },
 
         goToPage(page) {
@@ -196,21 +188,21 @@ export default {
             modal.show();
         },
 
-        firstUpperCase(value) {
-           if (!value) return "";
+        firstUpperCase(str) {
+            if (!str) return '';
 
-            return value
-                .split(',')
-                .map(item => {
-                    return item
-                        .trim() 
+            const strArray = Array.isArray(str) ? str : str.split(',');
+            return strArray
+                .map(word => {
+                    return word
+                        .trim()
                         .split(/\s+/)
-                        .map(word =>
+                        .map(word => 
                             word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
                         )
                         .join(' ');
-                })
-                .join(', '); 
+                })   
+                .join(', ');
         },
 
         sanitizePhone(value) {
@@ -219,12 +211,16 @@ export default {
             return value.toString().replace(/\D/g, '');
         },
 
-        recurrency() {
-            const count = (json, word) =>
-            json.reduce((acc, el) => acc + el.selectedVolunteerArea.split(',').filter(a => a.trim().toLowerCase() === word).length, 0);
+        formatDate(isoDate) {
+            if (!isoDate) return "";
+            
+            const date = new Date(isoDate);
+            
+            const day = String(date.getUTCDate()).padStart(2, "0");
+            const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+            const year = date.getUTCFullYear();
 
-            console.log(count(this.myListUsers, "kids"));
-            console.log(count(this.myListUsers, "logística"));
+            return `${day}/${month}/${year}`;
         }
     },
 

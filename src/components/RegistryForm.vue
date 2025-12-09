@@ -156,29 +156,40 @@ export default {
 			if (!this.photoBlob) return;
 			
 			const dataToSend = new FormData();
+
+			const parseDate = (dateStr) => {
+				if (!dateStr) return '';
+				const parts = dateStr.split('/');
+				if (parts.length !== 3) return '';
+				return `${parts[2]}-${parts[1]}-${parts[0]}`; // YYYY-MM-DD
+			};
+
 			dataToSend.append('image', this.photoBlob, 'foto.jpg');
 			dataToSend.append('fullName', this.formData.fullName.toLowerCase());
-			dataToSend.append('birthDate', this.formData.birthDate);
+			dataToSend.append('birthDate', parseDate(this.formData.birthDate));
 			dataToSend.append('phone', this.formData.phone);
-			dataToSend.append('selectedVolunteerArea', this.formData.selectedVolunteerArea);
-			dataToSend.append('baptismDate', this.formData.baptismDate);
+			dataToSend.append('selectedVolunteerArea', Array.isArray(this.formData.selectedVolunteerArea)
+															? this.formData.selectedVolunteerArea.join(',')
+															: this.formData.selectedVolunteerArea);
+			dataToSend.append('baptismDate', parseDate(this.formData.baptismDate));
 			dataToSend.append('selectedMemberDate', this.formData.selectedMemberDate);
 
 			if (this.validateInfoForm === true) return;
-			
+						
 			try {
-				await axios.post('http://localhost:3000/api/', dataToSend)
-				.then(res => {
-					(res.status === 200 || res.status === 201)
+				const res = await axios.post('http://localhost:3000/api/', dataToSend);
+				if (res.status === 200 || res.status === 201) {
 					this.appendAlert('<i class="bi bi-check-lg"></i> Seu voluntariado foi registrado!', 'primary');
-				});
-			} catch (err) {
-				this.appendAlert(`<i class="bi bi-exclamation-circle"></i> Houve o erro: ${err}`, 'danger');
+				}
+			} catch (error) {
+				this.appendAlert(`<i class="bi bi-exclamation-triangle"></i> Ocorreu um erro ao enviar o formulário: ${error.message}`, 'danger');
 			} finally {
+				// Reset form
 				this.formData = {
 					fullName: null,
 					birthDate: null,
-					selectedVolunteerArea: null,
+					phone: null,
+					selectedVolunteerArea: [],
 					baptismDate: null,
 					selectedMemberDate: null
 				};
