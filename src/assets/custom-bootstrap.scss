@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Sen:wght@400..800&display=swap');
+
+$font-family-sans-serif: 'Sen', sans-serif;
+$font-family-base: $font-family-sans-serif;
+$primary: #37C2CC;
+
+body { 
+  background: #ebf9ff;
+  background: linear-gradient(160deg,rgba(235, 249, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
+  background-repeat: no-repeat;
+  color: rgba(0, 0, 0, 0.7) !important; 
+}
+.btn-primary { 
+  color: #fff !important;
+}
+
+@import "bootstrap/scss/bootstrap";
