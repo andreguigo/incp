@@ -175,7 +175,9 @@ export default {
 			dataToSend.append('selectedMemberDate', this.formData.selectedMemberDate);
 
 			if (this.validateInfoForm === true) return;
-						
+
+			console.log(this.photoBlob.size);
+			
 			try {
 				const res = await axios.post('http://localhost:3000/api/', dataToSend);
 				if (res.status === 200 || res.status === 201) {

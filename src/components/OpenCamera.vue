@@ -59,7 +59,7 @@ export default {
 				console.log('Error accessing camera', err);
 			}
 		},
-		capturePhoto() {
+		async capturePhoto() {
 			const video = this.$refs.video;
 
 			const scale = Math.min(256 / video.videoWidth, 256 / video.videoHeight, 1);
@@ -69,14 +69,34 @@ export default {
 			const canvas = document.createElement('canvas');
 			canvas.width = w;
 			canvas.height = h;
+
 			canvas.getContext('2d').drawImage(video, 0, 0, w, h);
 
-			canvas.toBlob((blob) => {
-				this.photoBlob = blob;
-				this.photoDataUrl = URL.createObjectURL(blob);
+			const compressToMaxSize = (canvas, maxKb = 256) => {
+				return new Promise(resolve => {
+					let quality = 0.9;
 
-				this.$emit('photo-captured', this.photoBlob);
-			}, 'image/jpeg', 0.9);
+					const attemptCompress = () => {
+						canvas.toBlob(blob => {
+							if (blob.size / 1024 <= maxKb || quality <= 0.1) {
+								resolve(blob);
+							} else {
+								quality -= 0.1;
+								attemptCompress();
+							}
+						}, 'image/jpeg', quality);
+					};
+
+					attemptCompress();
+				});
+			}
+
+			const finalBlob = await compressToMaxSize(canvas, 256);
+
+			this.photoBlob = finalBlob;
+			this.photoDataUrl = URL.createObjectURL(finalBlob);
+
+			this.$emit('photo-captured', this.photoBlob);
 		},
 		stopCamera() {
 			this.areaCamera = false;
