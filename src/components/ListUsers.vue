@@ -153,12 +153,12 @@ export default {
     },
     methods: {
         async listUsers() {
-            const res = await axios.get('http://localhost:3000/api/');
+            const res = await axios.get(import.meta.env.API_URL);
             this.myListUsers = res.data;
         },
 
         async userOnly(identifier) {
-            const res = await axios.get(`http://localhost:3000/api/${identifier}`);
+            const res = await axios.get(`${import.meta.env.API_URL}${identifier}`);
             if (!res) return;
             
             this.userProfile = res.data;

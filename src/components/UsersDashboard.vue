@@ -58,7 +58,7 @@ export default {
 	},
 	methods: {
 		async listUsers() {
-            await axios.get('http://localhost:3000/api')
+            await axios.get(import.meta.env.API_URL)
                 .then(response => { 
                     this.myListUsers = response.data 
                 })
