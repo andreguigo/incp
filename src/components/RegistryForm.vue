@@ -179,7 +179,7 @@ export default {
 			console.log(this.photoBlob.size);
 			
 			try {
-				const res = await axios.post('http://localhost:3000/api/', dataToSend);
+				const res = await axios.post(import.meta.env.API_URL, dataToSend);
 				if (res.status === 200 || res.status === 201) {
 					this.appendAlert('<i class="bi bi-check-lg"></i> Seu voluntariado foi registrado!', 'primary');
 				}

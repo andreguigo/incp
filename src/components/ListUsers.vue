@@ -121,7 +121,6 @@ export default {
             search: "",
             myListUsers: [],
             userProfile: [],
-            baseUrl: import.meta.env.VITE_API_IMG_URL,
             itemsPerPage: 5,
             currentPage: 1
         };
