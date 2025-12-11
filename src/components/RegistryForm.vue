@@ -176,8 +176,6 @@ export default {
 
 			if (this.validateInfoForm === true) return;
 
-			console.log(this.photoBlob.size);
-			
 			try {
 				const res = await axios.post(import.meta.env.API_URL, dataToSend);
 				if (res.status === 200 || res.status === 201) {
@@ -186,7 +184,6 @@ export default {
 			} catch (error) {
 				this.appendAlert(`<i class="bi bi-exclamation-triangle"></i> Ocorreu um erro ao enviar o formulário: ${error.message}`, 'danger');
 			} finally {
-				// Reset form
 				this.formData = {
 					fullName: null,
 					birthDate: null,
