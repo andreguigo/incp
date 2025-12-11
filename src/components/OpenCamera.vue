@@ -117,7 +117,7 @@ export default {
 			formData.append('foto', this.photoBlob, 'foto.jpg');
 
 			try {
-				const response = await axios.post(import.meta.env.API_URL, 
+				const response = await axios.post(import.meta.env.VITE_API_URL, 
 					formData, {
 					headers: {
 						'Content-Type': 'multipart/form-data'

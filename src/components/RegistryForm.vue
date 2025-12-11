@@ -177,7 +177,7 @@ export default {
 			if (this.validateInfoForm === true) return;
 
 			try {
-				const res = await axios.post(import.meta.env.API_URL, dataToSend);
+				const res = await axios.post(import.meta.env.VITE_API_URL, dataToSend);
 				if (res.status === 200 || res.status === 201) {
 					this.appendAlert('<i class="bi bi-check-lg"></i> Seu voluntariado foi registrado!', 'primary');
 				}

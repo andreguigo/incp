@@ -153,12 +153,12 @@ export default {
     },
     methods: {
         async listUsers() {
-            const res = await axios.get(import.meta.env.API_URL);
+            const res = await axios.get(import.meta.env.VITE_API_URL);
             this.myListUsers = res.data;
         },
 
         async userOnly(identifier) {
-            const res = await axios.get(`${import.meta.env.API_URL}${identifier}`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}${identifier}`);
             if (!res) return;
             
             this.userProfile = res.data;
