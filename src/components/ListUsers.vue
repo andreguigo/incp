@@ -112,29 +112,30 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { Modal } from 'bootstrap';
+import { useUserStore } from '@/stores/user';
+
 export default {
     name: 'ListUsers',
     data() {
         return {
             search: "",
-            myListUsers: [],
+            listUsers: [],
             userProfile: [],
             itemsPerPage: 5,
             currentPage: 1
         };
     },
     created() {
-        this.listUsers();
+        this.fetchUsers();
     },
     computed: {
         filteredUsers() {
-            if (!Array.isArray(this.myListUsers)) return [];
+            if (!Array.isArray(this.listUsers)) return [];
 
             const term = this.search.toLowerCase();
 
-            return this.myListUsers.filter(row => 
+            return this.listUsers.filter(row => 
                 Object.values(row).some(value => 
                     String(value).toLowerCase().includes(term)
                 )
@@ -152,16 +153,18 @@ export default {
         }
     },
     methods: {
-        async listUsers() {
-            const res = await axios.get(import.meta.env.VITE_API_URL);
-            this.myListUsers = res.data;
+        async fetchUsers() {
+            const userStore = useUserStore();
+            await userStore.fetchUsers();
+
+            this.listUsers = userStore.users;
         },
 
-        async userOnly(identifier) {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}${identifier}`);
-            if (!res) return;
-            
-            this.userProfile = res.data;
+        async fetchUserById(id) {
+            const userStore = useUserStore();
+            await userStore.fetchUserById(id);
+
+            this.userProfile = userStore.currentUser;
         },
 
         goToPage(page) {
@@ -180,8 +183,8 @@ export default {
             }
         },
 
-        openModal(identifier) {
-            this.userOnly(identifier);
+        openModal(id) {
+            this.fetchUserById(id);
 
             const modal = new Modal(document.getElementById('userModal'));
             modal.show();

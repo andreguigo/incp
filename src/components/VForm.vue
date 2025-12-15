@@ -18,11 +18,11 @@
 			<input 
 				type="tel"
 				class="form-control"
-				v-model="formData.phone"
+				v-model="formData.phoneUser"
 				v-mask="['(##) ####-####', '(##) #####-####']"
 				placeholder="(99) 99999-9999"
 			>
-			<label for="phone">Telefone</label>
+			<label for="phoneUser">Telefone</label>
 		</div>
 		<div class="form-floating mb-3 ">
 			<p class="mb-2">Selecione até 3 áreas de voluntariado:</p>
@@ -93,11 +93,11 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { useUserStore } from '@/stores/user';
 import OpenCamera from './OpenCamera.vue';
 
 export default {
-	name: 'RegistryForm',
+	name: 'VForm',
 	components: {
 		OpenCamera
 	},
@@ -119,13 +119,12 @@ export default {
 			formData: {
 				fullName: null,
 				birthDate: null,
-				phone: null,
+				phoneUser: null,
 				selectedVolunteerArea: [],
 				baptismDate: null,
 				selectedMemberDate: null
 			},
-			alerts: [],
-			baseUrl: 'http://localhost:3000/public/',
+			alerts: []
 		}
 	},
 	mounted() {
@@ -167,7 +166,7 @@ export default {
 			dataToSend.append('image', this.photoBlob, 'foto.jpg');
 			dataToSend.append('fullName', this.formData.fullName.toLowerCase());
 			dataToSend.append('birthDate', parseDate(this.formData.birthDate));
-			dataToSend.append('phone', this.formData.phone);
+			dataToSend.append('phoneUser', this.formData.phoneUser);
 			dataToSend.append('selectedVolunteerArea', Array.isArray(this.formData.selectedVolunteerArea)
 															? this.formData.selectedVolunteerArea.join(',')
 															: this.formData.selectedVolunteerArea);
@@ -177,17 +176,18 @@ export default {
 			if (this.validateInfoForm === true) return;
 
 			try {
-				const res = await axios.post(import.meta.env.VITE_API_URL, dataToSend);
-				if (res.status === 200 || res.status === 201) {
+				const userStore = useUserStore();
+				const newUser = await userStore.createUser(dataToSend);
+				
+				if (newUser.status === 200 || newUser.status === 201)
 					this.appendAlert('<i class="bi bi-check-lg"></i> Seu voluntariado foi registrado!', 'primary');
-				}
 			} catch (error) {
 				this.appendAlert(`<i class="bi bi-exclamation-triangle"></i> Ocorreu um erro ao enviar o formulário: ${error.message}`, 'danger');
 			} finally {
 				this.formData = {
 					fullName: null,
 					birthDate: null,
-					phone: null,
+					phoneUser: null,
 					selectedVolunteerArea: [],
 					baptismDate: null,
 					selectedMemberDate: null

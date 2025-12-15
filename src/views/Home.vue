@@ -1,14 +1,14 @@
 <template>
-    <RegistryForm />
+    <VForm />
 </template>
 
 <script>
-import RegistryForm from '../components/RegistryForm.vue';
+import VForm from '../components/VForm.vue';
 
 export default {
     name: 'HomePage',
     components: {
-        RegistryForm
+        VForm
     }
 }
 </script>

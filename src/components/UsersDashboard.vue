@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { useUserStore } from '@/stores/user';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
@@ -17,7 +17,7 @@ export default {
 	name: "UsersDashboard",
 	data() {
         return {
-			myListUsers: [],
+			listUsers: [],
 			areas: [
 				"Acolhimento",
 				"Kids",
@@ -31,7 +31,7 @@ export default {
 		};
 	},
 	async mounted() {
-		await this.listUsers();
+		await this.fetchUsers();
 		
     	const ctx = this.$refs.chartCanvas;
 		
@@ -57,17 +57,14 @@ export default {
 		});
 	},
 	methods: {
-		async listUsers() {
-            await axios.get(import.meta.env.VITE_API_URL)
-                .then(response => { 
-                    this.myListUsers = response.data 
-                })
-                .catch(error => {
-                    console.error('Erro ao listar usuários:', error);
-                });
+		async fetchUsers() {
+            const userStore = useUserStore();
+            await userStore.fetchUsers();
+
+            this.listUsers = userStore.users;
         },
 		countArea(area) {
-			return this.myListUsers.reduce((acc, item) => {
+			return this.listUsers.reduce((acc, item) => {
 				const list = item.selectedVolunteerArea					
 
 				return acc + list.filter(a => a === area.toLowerCase()).length;

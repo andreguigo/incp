@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
-import RegistrationList from '../views/RegistrationList.vue';
 
 const routes = [
   {
@@ -11,7 +10,7 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Registration List',
-    component: RegistrationList
+    component: () => import('../views/RegistrationList.vue')
   }
 ];
 
