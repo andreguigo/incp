@@ -38,7 +38,7 @@
                                 />
                             </div></th>
                         <td>{{ firstUpperCase(user.fullName) }}</td>
-                        <td>{{ user.birthDate }}</td>
+                        <td>{{ userAge(user.birthDate) }}</td>
                         <td>{{ firstUpperCase(user.selectedVolunteerArea) }}</td>
                         <td>{{ user.selectedMemberDate }}</td>
                         <td><button class="btn btn-lg"><i class="bi bi-folder2-open"></i></button></td>
@@ -94,14 +94,14 @@
 
                             <div class="info d-flex flex-column justify-content-center align-items-start">
                                 <h4>Bio:</h4>
-                                <p>{{ firstUpperCase(userProfile.fullName).split(' ')[0] }} tem {{ userProfile.birthDate }} anos e é membro desde {{ userProfile.selectedMemberDate }}.</p>
+                                <p>{{ firstUpperCase(userProfile.fullName).split(' ')[0] }} tem {{ userAge(userProfile.birthDate) }} anos e é membro desde {{ userProfile.selectedMemberDate }}.</p>
                                 
                                 <h4>Foi batizada em:</h4>
                                 <p>{{ formatDate(userProfile.baptismDate) }}</p>
 
                                 <h4>Contato:</h4>
-                                <a class="btn" :href="'https://wa.me/' + sanitizePhone(userProfile.phone)" target="_blank"><i class="bi bi-whatsapp"></i> falar no Whatsapp</a>
-                                <a class="btn" :href="'tel:' + sanitizePhone(userProfile.phone)" target="_blank"><i class="bi bi-telephone-outbound"></i> ligar </a>
+                                <a class="btn" :href="'https://wa.me/' + sanitizePhone(userProfile.phoneUser)" target="_blank"><i class="bi bi-whatsapp"></i> falar no Whatsapp</a>
+                                <a class="btn" :href="'tel:' + sanitizePhone(userProfile.phoneUser)" target="_blank"><i class="bi bi-telephone-outbound"></i> ligar </a>
                             </div>
                         </div>                         
                     </div>
@@ -114,6 +114,8 @@
 <script>
 import { Modal } from 'bootstrap';
 import { useUserStore } from '@/stores/user';
+import { useDateUtil } from '@/utils/dateCasesUtil';
+import { useStringCaseUtil } from '@/utils/stringCasesUtil';
 
 export default {
     name: 'ListUsers',
@@ -190,21 +192,12 @@ export default {
             modal.show();
         },
 
-        firstUpperCase(str) {
-            if (!str) return '';
+        firstUpperCase(value) {
+            return useStringCaseUtil().firstUpperCase(value);
+        },
 
-            const strArray = Array.isArray(str) ? str : str.split(',');
-            return strArray
-                .map(word => {
-                    return word
-                        .trim()
-                        .split(/\s+/)
-                        .map(word => 
-                            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                        )
-                        .join(' ');
-                })   
-                .join(', ');
+        userAge(dateBirth) {
+            return useDateUtil().userAge(dateBirth);
         },
 
         sanitizePhone(value) {
@@ -214,15 +207,7 @@ export default {
         },
 
         formatDate(isoDate) {
-            if (!isoDate) return "";
-            
-            const date = new Date(isoDate);
-            
-            const day = String(date.getUTCDate()).padStart(2, "0");
-            const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-            const year = date.getUTCFullYear();
-
-            return `${day}/${month}/${year}`;
+            return useDateUtil().formatDate(isoDate);
         }
     },
 
