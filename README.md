@@ -1,69 +1,61 @@
-# Volunteer (INCP App)
-  
 ![Vollunteer](https://raw.githubusercontent.com/andreguigo/incp/refs/heads/main/public/volunteer.png)
 
+# Volunteer App
 
-Aplicação web front-end desenvolvida para o registro de voluntários em diversas áreas de atividades da INCP.
-
-Este repositório contém o código-fonte da interface da aplicação **Volunteer**, construída utilizando as tecnologias modernas de desenvolvimento frontend para proporcionar uma experiência interativa e responsiva.
+O código deste respositório é uma aplicação web front-end desenvolvida para o registro de voluntários em diversas áreas de atividades da INCP.
 
 **INCP** é a sigla para **Igreja do Nazareno Central de Paulista - PE**.
-
----
-## 🚀 Visão Geral
-
-O **Volunteer** é um projeto web desenvolvido para registro em **Vue 3** com **Vite** como bundler, organizado para ser facilmente customizado e expandido. Ele fornece uma base sólida para aplicações modernas de interface, com configuração de desenvolvimento e produção já preparadas.
-
-👉 Projeto hospedado em: `incpapp.vercel.app` (deploy automático via Vercel)
-
----
-## 📦 Tecnologias Utilizadas
-
-✔️ **Vue 3** — Framework JavaScript para construção de interfaces reativas
-✔️ **Vite** — Bundler rápido e moderno para desenvolvimento e build
-✔️ **JavaScript / HTML / CSS** — Linguagens base do front-end
-✔️ **Vercel** — Plataforma de hospedagem para aplicações front-end
-
----
-## 📁 Estrutura do Projeto
  
+## Visão Geral
+
+O **Volunteer** é um projeto desenvolvido em **Vue 3**, organizado para ser facilmente customizado e expandido.
+
+Projeto hospedado em: `incpapp.vercel.app` (deploy automático via Vercel)
+
+### Tecnologias Utilizadas
+* Vue 3
+* Vite
+* JavaScript / HTML / CSS
+* Vercel
+
+#### Outros pacotes na aplicação
+* Bootstrap
+* Chart
+* Pinia
+* Axios
+
+
+### Git e/ou Versionamento
+`main` - branch de versão publicada.
+
+_Aqui não há necessidade de uma branch para homologação ou outras situações por se tratar de uma aplicação de laboratório_.
+
+#### Contribuições são bem-vindas! 
+Se quiser adicionar novas funcionalidades, corrigir bugs ou melhorar a documentação:
+
+1. Fork este repositório
+2. Crie uma nova branch
+```bash
+    git checkout -b feature/nova-funcionalidade
 ```
-📦incp
- ┣ 📂.vscode
- ┣ 📂public
- ┣ 📂src
- ┣ 📜.gitignore
- ┣ 📜eslint.config.js
- ┣ 📜index.html
- ┣ 📜package.json
- ┣ 📜vite.config.js
- ┗ 📜vercel.json
-```
+3. Faça suas alterações e commit
+4. Abra um Pull Request
 
----
-## 🛠️ Pré-requisitos
+## Execução
 
-Antes de começar, certifique-se de ter instalado:
-
-* Node.js (v16+ recomendado)
-* npm (ou yarn, se preferir)
-
----
-## 🙌 Contribuindo
-
-Contribuições são bem-vindas! Se quiser adicionar novas funcionalidades, corrigir bugs ou melhorar a documentação:
-
-1. **Fork este repositório**
-2. **Crie uma nova branch**
+Certifique-se que você está na raíz do projeto `volunteer` e execute o comando abaixo para instalar as dependências:
 
 ```bash
-git checkout -b feature/nova-funcionalidade
+    npm install
 ```
 
-3. **Faça suas alterações e commit**
-4. **Abra um Pull Request**
+logo após, execute o projeto:
 
----
-## 📄 Licença
+```bash
+    npm run dev
+```
 
-Este projeto está disponível sob a licença especificada no repositório (ver arquivo LICENSE ou política de uso padrão do GitHub).
+## Atualizações
+
+__Vs 1.0.0__
+* Versão inicial do projeto
