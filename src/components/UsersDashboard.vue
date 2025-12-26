@@ -20,13 +20,13 @@ export default {
 			listUsers: [],
 			areas: [
 				"Acolhimento",
-				"Kids",
-				"Compaixão",
-				"Técnica",
-				"Logística",
-				"Intercessão",
 				"Café",
-				"Livraria"
+				"Compaixão",
+				"Intercessão",
+				"Kids",
+				"Livraria",
+				"Logística",
+				"Técnica"
 			]
 		};
 	},
@@ -45,9 +45,9 @@ export default {
 					label: "",
 					data: counts,
 					borderWidth: 2,
-					tension: 0.3,
-					pointRadius: 4,
-					fill: false
+					tension: 0,
+					pointRadius: 2,
+					fill: true
 				}]
 			},
 			options: {
