@@ -55,7 +55,7 @@
                 </li>
 
                 <li 
-                    v-for="page in totalPages"
+                    v-for="page in pageNumbers"
                     :key="page"
                     class="page-item"
                     :class="{ active: currentPage === page }"
@@ -65,7 +65,7 @@
                     </button>
                 </li>
 
-                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                <li class="page-item" :class="{ disabled: currentPage === pageNumbers }">
                     <button class="page-link" @click="nextPage">Próxima</button>
                 </li>
 
@@ -124,7 +124,7 @@ export default {
             search: "",
             listUsers: [],
             userProfile: [],
-            itemsPerPage: 5,
+            itemsPerPage: 10,
             currentPage: 1
         };
     },
@@ -144,8 +144,30 @@ export default {
             );
         },
 
-        totalPages() {
-            return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+        pageNumbers() {
+            const totalPages = Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+            
+            if (totalPages <= 7) {
+                return Array.from({ length: totalPages }, (_, i) => i + 1);
+            }
+            
+            const current = this.currentPage;
+            const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+            
+            return pages
+                .filter(page => 
+                    page === 1 || 
+                    page === totalPages || 
+                    page >= totalPages - 1 ||
+                    Math.abs(page - current) <= 1
+                )
+                .reduce((acc, page, i, arr) => {
+                    if (i > 0 && page - arr[i - 1] > 1) {
+                        acc.push('...');
+                    }
+                    acc.push(page);
+                    return acc;
+                }, []);
         },
 
         paginatedUsers() {
@@ -174,7 +196,7 @@ export default {
         },
 
         nextPage() {
-            if (this.currentPage < this.totalPages) {
+            if (this.currentPage < this.pageNumbers) {
                 this.currentPage++;
             }
         },
