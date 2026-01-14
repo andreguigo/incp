@@ -1,7 +1,7 @@
 <template>
     <footer>
-        <div class="mb-5">
-            <p>&copy; 2025 Volunteer</p>
+        <div class="text-center p-5">
+            <p>&copy; 2026 Volunteer</p>
         </div>
     </footer>
 </template>
