@@ -1,5 +1,5 @@
 export const useDateUtil = () => ({
-    userAge(dateBirth) {
+    customerAge(dateBirth) {
         if (!dateBirth) return null;
 
         let date;

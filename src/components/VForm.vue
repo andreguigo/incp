@@ -18,11 +18,11 @@
 			<input 
 				type="tel"
 				class="form-control"
-				v-model="formData.phoneUser"
+				v-model="formData.phoneCustomer"
 				v-mask="['(##) ####-####', '(##) #####-####']"
 				placeholder="(99) 99999-9999"
 			>
-			<label for="phoneUser">Telefone</label>
+			<label for="phoneCustomer">Telefone</label>
 		</div>
 		<div class="form-floating mb-3 ">
 			<p class="mb-2">Selecione até 3 áreas de voluntariado:</p>
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/user';
+import { useCustomerStore } from '@/stores/customers';
 import OpenCamera from './OpenCamera.vue';
 
 export default {
@@ -119,7 +119,7 @@ export default {
 			formData: {
 				fullName: null,
 				birthDate: null,
-				phoneUser: null,
+				phoneCustomer: null,
 				selectedVolunteerArea: [],
 				baptismDate: null,
 				selectedMemberDate: null
@@ -166,7 +166,7 @@ export default {
 			dataToSend.append('image', this.photoBlob, 'foto.jpg');
 			dataToSend.append('fullName', this.formData.fullName.toLowerCase());
 			dataToSend.append('birthDate', parseDate(this.formData.birthDate));
-			dataToSend.append('phoneUser', this.formData.phoneUser);
+			dataToSend.append('phoneCustomer', this.formData.phoneCustomer);
 			dataToSend.append('selectedVolunteerArea', Array.isArray(this.formData.selectedVolunteerArea)
 															? this.formData.selectedVolunteerArea.join(',')
 															: this.formData.selectedVolunteerArea);
@@ -176,10 +176,10 @@ export default {
 			if (this.validateInfoForm === true) return;
 
 			try {
-				const userStore = useUserStore();
-				const newUser = await userStore.createUser(dataToSend);
+				const customerStore = useCustomerStore();
+				const newCustomer = await customerStore.createCustomer(dataToSend);
 				
-				if (newUser.status === 200 || newUser.status === 201)
+				if (newCustomer.status === 200 || newCustomer.status === 201)
 					this.appendAlert('<i class="bi bi-check-lg"></i> Seu voluntariado foi registrado!', 'primary');
 			} catch (error) {
 				this.appendAlert(`<i class="bi bi-exclamation-triangle"></i> Ocorreu um erro ao enviar o formulário: ${error.message}`, 'danger');
@@ -187,7 +187,7 @@ export default {
 				this.formData = {
 					fullName: null,
 					birthDate: null,
-					phoneUser: null,
+					phoneCustomer: null,
 					selectedVolunteerArea: [],
 					baptismDate: null,
 					selectedMemberDate: null

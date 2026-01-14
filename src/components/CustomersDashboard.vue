@@ -9,15 +9,15 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/user';
+import { useCustomerStore } from '@/stores/customers';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 export default {
-	name: "UsersDashboard",
+	name: "CustomersDashboard",
 	data() {
         return {
-			listUsers: [],
+			listCustomers: [],
 			areas: [
 				"Acolhimento",
 				"Café",
@@ -31,7 +31,7 @@ export default {
 		};
 	},
 	async mounted() {
-		await this.fetchUsers();
+		await this.fetchCustomers();
 		
     	const ctx = this.$refs.chartCanvas;
 		
@@ -57,14 +57,14 @@ export default {
 		});
 	},
 	methods: {
-		async fetchUsers() {
-            const userStore = useUserStore();
-            await userStore.fetchUsers();
+		async fetchCustomers() {
+            const customerStore = useCustomerStore();
+            await customerStore.fetchCustomers();
 
-            this.listUsers = userStore.users;
+            this.listCustomers = customerStore.customers;
         },
 		countArea(area) {
-			return this.listUsers.reduce((acc, item) => {
+			return this.listCustomers.reduce((acc, item) => {
 				const list = item.selectedVolunteerArea					
 
 				return acc + list.filter(a => a === area.toLowerCase()).length;

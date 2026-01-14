@@ -8,7 +8,7 @@
             placeholder="Buscar..."
             class="form-control mb-3"
         />
-        {{ filteredUsers.length }} voluntários encontrados.
+        {{ filteredCustomers.length }} voluntários encontrados.
 
         <hr />
     
@@ -26,21 +26,21 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider"> 
-                    <tr v-for="(user, index) in paginatedUsers" :key="user.id"  @click="openModal(user.id)">
+                    <tr v-for="(customer, index) in paginatedCustomers" :key="customer.id"  @click="openModal(customer.id)">
                         <th scope="row">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</th>
                         <th scope="row">
                             <div class="avatar-tb">
                                 <img 
-                                    :src="user.fileNameUrl" 
-                                    :alt="'Foto de perfil de ' + user.fullName" 
+                                    :src="customer.fileNameUrl" 
+                                    :alt="'Foto de perfil de ' + customer.fullName" 
                                     class="rounded"
                                     width="96"
                                 />
                             </div></th>
-                        <td>{{ firstUpperCase(user.fullName) }}</td>
-                        <td>{{ userAge(user.birthDate) }}</td>
-                        <td>{{ firstUpperCase(user.selectedVolunteerArea) }}</td>
-                        <td>{{ user.selectedMemberDate }}</td>
+                        <td>{{ firstUpperCase(customer.fullName) }}</td>
+                        <td>{{ customerAge(customer.birthDate) }}</td>
+                        <td>{{ firstUpperCase(customer.selectedVolunteerArea) }}</td>
+                        <td>{{ customer.selectedMemberDate }}</td>
                         <td><button class="btn btn-lg"><i class="bi bi-folder2-open"></i></button></td>
                     </tr>
                 </tbody>
@@ -73,7 +73,7 @@
         </nav>
 
         <!-- Modal -->
-        <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal fade" id="customerModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content rounded-4 shadow">
                     <div class="modal-header">
@@ -83,25 +83,25 @@
                         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
                             <div class="avatar">
                                 <img 
-                                    :src="userProfile.fileNameUrl" 
-                                    :alt="'Foto de perfil de ' + userProfile.fullName" 
+                                    :src="customerProfile.fileNameUrl" 
+                                    :alt="'Foto de perfil de ' + customerProfile.fullName" 
                                     class="rounded"
                                     width="128"
                                 />
                             </div>
-                            <h2>{{ firstUpperCase(userProfile.fullName) }}</h2>
-                            <p class="lead">{{ firstUpperCase( userProfile.selectedVolunteerArea ) }}</p>
+                            <h2>{{ firstUpperCase(customerProfile.fullName) }}</h2>
+                            <p class="lead">{{ firstUpperCase( customerProfile.selectedVolunteerArea ) }}</p>
 
                             <div class="info d-flex flex-column justify-content-center align-items-start">
                                 <h4>Bio:</h4>
-                                <p>{{ firstUpperCase(userProfile.fullName).split(' ')[0] }} tem {{ userAge(userProfile.birthDate) }} anos e é membro desde {{ userProfile.selectedMemberDate }}.</p>
+                                <p>{{ firstUpperCase(customerProfile.fullName).split(' ')[0] }} tem {{ customerAge(customerProfile.birthDate) }} anos e é membro desde {{ customerProfile.selectedMemberDate }}.</p>
                                 
                                 <h4>Foi batizada em:</h4>
-                                <p>{{ formatDate(userProfile.baptismDate) }}</p>
+                                <p>{{ formatDate(customerProfile.baptismDate) }}</p>
 
                                 <h4>Contato:</h4>
-                                <a class="btn" :href="'https://wa.me/' + sanitizePhone(userProfile.phoneUser)" target="_blank"><i class="bi bi-whatsapp"></i> falar no Whatsapp</a>
-                                <a class="btn" :href="'tel:' + sanitizePhone(userProfile.phoneUser)" target="_blank"><i class="bi bi-telephone-outbound"></i> ligar </a>
+                                <a class="btn" :href="'https://wa.me/' + sanitizePhone(customerProfile.phoneCustomer)" target="_blank"><i class="bi bi-whatsapp"></i> falar no Whatsapp</a>
+                                <a class="btn" :href="'tel:' + sanitizePhone(customerProfile.phoneCustomer)" target="_blank"><i class="bi bi-telephone-outbound"></i> ligar </a>
                             </div>
                         </div>                         
                     </div>
@@ -113,31 +113,31 @@
 
 <script>
 import { Modal } from 'bootstrap';
-import { useUserStore } from '@/stores/user';
+import { useCustomerStore } from '@/stores/customers';
 import { useDateUtil } from '@/utils/dateCasesUtil';
 import { useStringCaseUtil } from '@/utils/stringCasesUtil';
 
 export default {
-    name: 'ListUsers',
+    name: 'ListCustomers',
     data() {
         return {
             search: "",
-            listUsers: [],
-            userProfile: [],
+            listCustomers: [],
+            customerProfile: [],
             itemsPerPage: 10,
             currentPage: 1
         };
     },
     created() {
-        this.fetchUsers();
+        this.fetchCustomers();
     },
     computed: {
-        filteredUsers() {
-            if (!Array.isArray(this.listUsers)) return [];
+        filteredCustomers() {
+            if (!Array.isArray(this.listCustomers)) return [];
 
             const term = this.search.toLowerCase();
 
-            return this.listUsers.filter(row => 
+            return this.listCustomers.filter(row =>
                 Object.values(row).some(value => 
                     String(value).toLowerCase().includes(term)
                 )
@@ -145,7 +145,7 @@ export default {
         },
 
         pageNumbers() {
-            const totalPages = Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+            const totalPages = Math.ceil(this.filteredCustomers.length / this.itemsPerPage);
             
             if (totalPages <= 7) {
                 return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -170,25 +170,24 @@ export default {
                 }, []);
         },
 
-        paginatedUsers() {
+        paginatedCustomers() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
             const end = start + this.itemsPerPage;
-            return this.filteredUsers.slice(start, end);
+            return this.filteredCustomers.slice(start, end);
         }
     },
     methods: {
-        async fetchUsers() {
-            const userStore = useUserStore();
-            await userStore.fetchUsers();
-
-            this.listUsers = userStore.users;
+        async fetchCustomers() {
+            const customerStore = useCustomerStore();
+            await customerStore.fetchCustomers();
+            this.listCustomers = customerStore.customers;
         },
 
-        async fetchUserById(id) {
-            const userStore = useUserStore();
-            await userStore.fetchUserById(id);
+        async fetchCustomerById(id) {
+            const customerStore = useCustomerStore();
+            await customerStore.fetchCustomerById(id);
 
-            this.userProfile = userStore.currentUser;
+            this.customerProfile = customerStore.currentCustomer;
         },
 
         goToPage(page) {
@@ -208,9 +207,9 @@ export default {
         },
 
         openModal(id) {
-            this.fetchUserById(id);
+            this.fetchCustomerById(id);
 
-            const modal = new Modal(document.getElementById('userModal'));
+            const modal = new Modal(document.getElementById('customerModal'));
             modal.show();
         },
 
@@ -218,8 +217,8 @@ export default {
             return useStringCaseUtil().firstUpperCase(value);
         },
 
-        userAge(dateBirth) {
-            return useDateUtil().userAge(dateBirth);
+        customerAge(dateBirth) {
+            return useDateUtil().customerAge(dateBirth);
         },
 
         sanitizePhone(value) {
