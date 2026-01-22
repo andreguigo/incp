@@ -17,7 +17,6 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">&nbsp;</th>
                         <th scope="col">Nome</th>
                         <th scope="col">Idade</th>
                         <th scope="col">Área(s) escolhida</th>
@@ -28,15 +27,6 @@
                 <tbody class="table-group-divider"> 
                     <tr v-for="(customer, index) in paginatedCustomers" :key="customer.id"  @click="openModal(customer.id)">
                         <th scope="row">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</th>
-                        <th scope="row">
-                            <div class="avatar-tb">
-                                <img 
-                                    :src="customer.fileNameUrl" 
-                                    :alt="'Foto de perfil de ' + customer.fullName" 
-                                    class="rounded"
-                                    width="96"
-                                />
-                            </div></th>
                         <td>{{ firstUpperCase(customer.fullName) }}</td>
                         <td>{{ customerAge(customer.birthDate) }}</td>
                         <td>{{ firstUpperCase(customer.selectedVolunteerArea) }}</td>
@@ -89,7 +79,7 @@
                                     width="128"
                                 />
                             </div>
-                            <h2>{{ firstUpperCase(customerProfile.fullName) }}</h2>
+                            <h2 class="text-center">{{ firstUpperCase(customerProfile.fullName) }}</h2>
                             <p class="lead">{{ firstUpperCase( customerProfile.selectedVolunteerArea ) }}</p>
 
                             <div class="info d-flex flex-column justify-content-center align-items-start">
