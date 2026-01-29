@@ -17,8 +17,7 @@ export const useCustomerStore = defineStore('customer', {
     },
 
     actions: {
-        async fetchCustomers() {
-            this.loading = true
+        async fetchCustomers() {            
             this.error = null
             try {
                 const response = await api.get('/customers')
@@ -32,7 +31,6 @@ export const useCustomerStore = defineStore('customer', {
         },
 
         async fetchCustomerById(id) {
-            this.loading = true
             this.error = null
             try {
                 const response = await api.get(`/customers/${id}`)
@@ -45,8 +43,7 @@ export const useCustomerStore = defineStore('customer', {
             }
         },
 
-        async createCustomer(customerData) {
-            this.loading = true
+        async createCustomer(customerData) {            
             this.error = null
             try {
                 const response = await api.post('/customers', customerData)
@@ -60,8 +57,7 @@ export const useCustomerStore = defineStore('customer', {
             }
         },
 
-        async updateCustomer(id, customerData) {
-            this.loading = true
+        async updateCustomer(id, customerData) {            
             this.error = null
             try {
                 const response = await api.put(`/customers/${id}`, customerData)
@@ -79,8 +75,7 @@ export const useCustomerStore = defineStore('customer', {
             }
         },
 
-        async deleteCustomer(id) {
-            this.loading = true
+        async deleteCustomer(id) {            
             this.error = null
             try {
                 await api.delete(`/customers/${id}`)
