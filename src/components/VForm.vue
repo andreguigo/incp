@@ -66,14 +66,15 @@
 		<div class="d-grid">
 			<hr class="my-4">
 			<button type="submit" class="btn btn-primary btn-lg rounded-pill px-3" :disabled="!isFormValid">
-				<i class="bi bi-stars"></i> Registrar meu voluntariado
+				<span v-if="!loading"> <i class="bi bi-stars"></i> Registrar meu voluntariado </span>
+				<span v-else> <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> registrando... </span>
 			</button>
 		</div>
 	</form>	
 
 	<!-- alerts area -->
 	<div
-		class="position-fixed top-0 start-50 translate-middle-x mt-3 w-100"
+		class="position-fixed top-0 start-50 translate-middle-x mt-5 w-100"
       	style="max-width: 75%; z-index: 1080;"
 	>
 		<div
@@ -124,7 +125,8 @@ export default {
 				baptismDate: null,
 				selectedMemberDate: null
 			},
-			alerts: []
+			alerts: [],
+			loading: false,
 		}
 	},
 	mounted() {
@@ -176,6 +178,8 @@ export default {
 			if (this.validateInfoForm === true) return;
 
 			try {
+				this.loading = true
+				
 				const customerStore = useCustomerStore();
 				const newCustomer = await customerStore.createCustomer(dataToSend);
 				
@@ -183,6 +187,7 @@ export default {
 					this.appendAlert('<i class="bi bi-check-lg"></i> Seu voluntariado foi registrado!', 'primary');
 			} catch (error) {
 				this.appendAlert(`<i class="bi bi-exclamation-triangle"></i> Ocorreu um erro ao enviar o formulário: ${error.message}`, 'danger');
+				this.loading = false;
 			} finally {
 				this.formData = {
 					fullName: null,
@@ -193,6 +198,7 @@ export default {
 					selectedMemberDate: null
 				};
 				this.photoBlob = null;
+				this.loading = false;
 			}
 		},
 		validateInfoForm() {
@@ -208,7 +214,7 @@ export default {
 				'warning',
 			);
 		},
-		appendAlert(message, type, duration = 10000) {
+		appendAlert(message, type, duration = 20000) {
 			const id = Date.now() + Math.random();
 			const alert = { id, message, type };
 			this.alerts.push(alert);
