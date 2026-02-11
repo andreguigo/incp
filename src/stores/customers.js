@@ -17,6 +17,25 @@ export const useCustomerStore = defineStore('customer', {
     },
 
     actions: {
+        async exportExcelCustomers() {            
+            this.error = null
+            try {
+                const response = await api.get('/customers/export', { responseType: 'blob' })
+                const url = window.URL.createObjectURL(new Blob([response.data]))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', 'customers.xlsx')
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            } catch (error) {
+                this.error = error.message
+                console.error('Erro ao exportar clientes:', error)
+            } finally {
+                this.loading = false
+            }
+        },
+
         async fetchCustomers() {            
             this.error = null
             try {

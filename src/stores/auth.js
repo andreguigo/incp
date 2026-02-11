@@ -54,6 +54,13 @@ export const useAuthStore = defineStore('auth', {
             this.isAuthenticated = true
         },
 
+        fetchCurrentUser() {
+            const storedAuth = localStorage.getItem('authVolunteer')
+            if (!storedAuth) return
+
+            return JSON.parse(storedAuth)
+        },
+
         isTokenExpired(token) {
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]))
@@ -62,6 +69,11 @@ export const useAuthStore = defineStore('auth', {
             } catch {
                 return true
             }
+        },
+
+        getUserRole(token) {
+            const payload = JSON.parse(atob(token.split('.')[1]))
+            return payload.role
         },
 
         logout() {
