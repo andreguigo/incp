@@ -8,7 +8,14 @@
             placeholder="Buscar..."
             class="form-control mb-3"
         />
+
         {{ filteredCustomers.length }} voluntários encontrados.
+
+        <small class="d-block text-end">
+            <button class="btn btn-sm btn-success" @click="exportExcelCustomers">
+                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+            </button>
+        </small>
 
         <hr />
     
@@ -219,7 +226,12 @@ export default {
 
         formatDate(isoDate) {
             return useDateUtil().formatDate(isoDate);
-        }
+        },
+
+        async exportExcelCustomers() {
+            const customerStore = useCustomerStore();
+            await customerStore.exportExcelCustomers();
+        },
     },
 
     watch: {
