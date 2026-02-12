@@ -1,7 +1,18 @@
 <template>
     <div class="container-fluid p-4">
-        <h2>Lista de Voluntários</h2>
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
 
+            <h2>Lista de Voluntários</h2>
+    
+            <small class=" text-end">
+                <button class="btn btn-sm btn-outline-success" @click="exportExcelCustomers">
+                    <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+                </button>
+            </small>
+        </div>
+        
+        <hr />
+        
         <input
             v-model="search"
             type="text"
@@ -10,12 +21,6 @@
         />
 
         {{ filteredCustomers.length }} voluntários encontrados.
-
-        <small class="d-block text-end">
-            <button class="btn btn-sm btn-success" @click="exportExcelCustomers">
-                <i class="bi bi-file-earmark-excel"></i> Exportar Excel
-            </button>
-        </small>
 
         <hr />
     
