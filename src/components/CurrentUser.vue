@@ -1,10 +1,8 @@
 <template>
-    <div class="nav justify-content-end mb-2">
-        <span class="nav-link link-secondary px-2"> <i class="bi bi-person-check-fill"></i> {{ currentUser.username }}</span>
-        <button class="btn btn-sm btn-danger" @click="logout">Sair <i class="bi bi-box-arrow-right"></i></button>
+    <div class="navbar justify-content-end border-bottom">
+        <span class="nav-link link-secondary me-2"> <i class="bi bi-person-check-fill"></i> {{ currentUser.username }}</span>
+        <button class="btn btn-danger btn-sm" @click="logout">Sair <i class="bi bi-box-arrow-right"></i></button>
     </div>
-    
-    <hr />
 </template>
 
 <script>
